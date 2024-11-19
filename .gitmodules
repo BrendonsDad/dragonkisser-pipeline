@@ -1,4 +1,4 @@
-[submodule "pipeline/lib/shotgun_api3"]
+[submodule "pipeline/pipe/db/shotgun_api3"]
 	path = pipeline/pipe/db/shotgun_api3
 	url = https://github.com/shotgunsoftware/python-api.git
 	ignore = dirty

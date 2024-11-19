@@ -159,7 +159,7 @@ class SGaaDB(DBInterface):
     def _asset_attr_mapper(
         asset_list: list[dict],
         attr: str,
-        child_mode: DBInterface.ChildQueryMode = DBInterface.ChildQueryMode.LEAVES,
+        child_mode: DBInterface.ChildQueryMode = DBInterface.ChildQueryMode.ALL,
     ) -> list[str]:
         if child_mode == DBInterface.ChildQueryMode.ALL:
             arr = [a[attr] for a in asset_list]
@@ -319,9 +319,8 @@ class _Query(ABC):
 
 class _AssetListQuery(_Query):
     """Helper class for making queries about assets to a SG connection instance"""
-
+    # IF MISSING ASSET TYPES: CHANGE LIST SO THEY ARE TRACKED
     _untracked_asset_types = [
-        "Environment",
         "FX",
         "Graphic",
         "Matte Painting",

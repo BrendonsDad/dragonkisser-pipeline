@@ -29,6 +29,9 @@ pipeline/lib/axiom
 
 # Ignore third-party Python libraries
 pipeline/lib/python
-
+pipeline/lib/pyside6
 # Ignore debug log
 debug.log
+
+gradientMasking
+
