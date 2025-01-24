@@ -1,16 +1,21 @@
-
-
-from pipe.db import DB
-from pipe.glui.dialogs import FilteredListDialog, MessageDialog
-from env_sg import DB_Config
-from shared.util import get_production_path
-from os import listdir
-from os.path import isfile
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from software.Unreal_Engine import asset_import_dependencies as dep
-from Qt.QtWidgets import QApplication, QWidget
+import tkinter
+from tkinter import filedialog
 
-CHILD_MODE = DB.ChildQueryMode.ALL
+
+root = tkinter.Tk() # } execute these lines once, to "initialise" tkinter
+root.iconify()
+def prompt_files():
+    try:
+        file_paths = filedialog.askopenfilenames()
+        root.iconify()
+    except tkinter.TclError: # this error was raised once or twice while testing, just in case return an empty list
+        return []
+    else:
+        return file_paths
+def stop_tk(): # call this when you're done selecting files, to stop tkinter from running mainloop in the background
+    root.destroy()
 
 def main():
     
@@ -21,68 +26,60 @@ def main():
     TEX_FORMAT_STR = {dep.STRTSTR:["T"], dep.ENDSTR:["Texture_Map", "BaseColor", "ORM", "Normal", "Emissive", "ORMG"]} #if something complains later, remove texture_map or fix error
     TEX_FILETYPES = ["png"]
     TEX_IMPORT_HELPER_ID_STRING = dep.FUNC_ID_TEXTURE
-    app = QApplication.instance()
-    if(app is None):
-        app = QApplication([])
-    root = QWidget()
-    # root.show()
-    root.closeEvent = lambda event: app.quit()
-    _conn = DB.Get(DB_Config)
-    
-    fld = FilteredListDialog(root,
-    _conn.get_asset_name_list(sorted=True, child_mode=CHILD_MODE),
-    "Import Asset Via Association using ShotGrid:", "Select an asset group to import", accept_button_name = "Import")
-    if not fld.exec():
-        return
-    item = fld.get_selected_item()
-    if item is None:
-        start = MessageDialog(root, "No asset selected. Cancelling Import", "Null Asset",).exec_()
-        return
-    
-    asset = _conn.get_asset_by_name(item)
-    try:
-        assert asset is not None
-        assert asset.path is not None
-    except AssertionError:
-        
-        return
 
-    asset_path = get_production_path() / asset.path
-    fbx_path = str(asset_path / f"{asset.name}.fbx")
-    
-    tex_assets_path:Path = get_production_path() / asset.tex_path
-    tex_assets_stringpath_list = [str(tex_assets_path / f) for f in listdir(tex_assets_path) if isfile((tex_assets_path / f))]
+    SOURCE_DIRECTORY: Path = Path("G:\\skyguard\\prototypeAssets")
+    DESTINATION_DIRECTORY:Path = Path("Y25\\Art\\Props")
+    files_to_import = prompt_files()
+    fbx_files = []
+    fbx_offsrcc = []
+    tex_files = []
+    tex_offsrcc = []
+    for file in files_to_import:
+        ext = file.split(".").pop(-1).lower()
+        if ext == "png":
+            tex_files.append(Path(file))
+            tex_offsrcc.append(Path(file).relative_to(SOURCE_DIRECTORY))
+        if ext == "fbx":
+            fbx_files.append(Path(file))
+            fbx_offsrcc.append(Path(file).relative_to(SOURCE_DIRECTORY))
 
-    print("Attempting to fetch: {fbx_path}".format(fbx_path = fbx_path))
-    filename_check = dep.check_format_of_filename(fbx_path, FBX_FORMAT_STR, FBX_FILETYPES, asset.path)
-    print(filename_check)
-    if asset_path is not None:
+    print(fbx_files)
+    print(fbx_offsrcc)
+    print(tex_files)
+    print(tex_offsrcc)
     
-        if fbx_path:
+    for file, fbx_offsrc in zip(fbx_files, fbx_offsrcc):
+        print("Attempting to fetch: {file}".format(file = str(PureWindowsPath(file))))
+        filename_check = dep.check_format_of_filename(str(PureWindowsPath(file)), FBX_FORMAT_STR, FBX_FILETYPES, str(PureWindowsPath(fbx_offsrc)))
+        print("filename_check_return value:", filename_check, sep="\n")
+        if str(PureWindowsPath(file)):
             pop = dep.import_helper(filename_check, FBX_IMPORT_HELPER_ID_STRING)
-            print(pop)
+            print("location 1", pop)
             if len(pop) < 2 or pop[0] is None or pop[1] is None:
                 raise ValueError("")
-            dep.create_mat_instances(pop[0], pop[1])
+        print("output of import_helper:" , pop)
+        # newPath = "/".join(pop[1].replace("Game/", "").split("/")[:-1])
+        # print(newPath, "np")
+        # newName = pop[0].replace("SM_G:/skyguard/prototypeAssets", "").replace(newPath, "").replace("/", "")
+        # print(newName, "nn\n\n\n")
+        # newPath = "/Game" + newPath
+        # print("parameters:", newName, newPath)
+        newPath = "/".join(pop[1].split("/")[:-1])
+        newName = pop[0]
+        print("np: ", newPath)
+        print("nn: ", newName)
+        dep.create_mat_instances(newName, newPath)
         if filename_check is None:
-            print("Failed import. Check the naming convention?")
-        filtered_stringpath_list = [x for x in tex_assets_stringpath_list if ".png" in x]
-        for oneFile in filtered_stringpath_list:
-            print("Attempting to fetch: {oneFile}".format(oneFile = oneFile))
-            filename_check = dep.check_format_of_filename(oneFile, TEX_FORMAT_STR, TEX_FILETYPES, asset.path + "/Textures")
-            print("filename_check_return value:", filename_check, sep="\n")
-            if oneFile:
-                pop = dep.import_helper(filename_check, TEX_IMPORT_HELPER_ID_STRING)
-            if filename_check is None:
-                pass
-    else:
-        print("No file selected.")
-        exit(0)
-
-
-
-    # tex_file_paths TODO figure this out.
-    
-    pass
+            pass
+   
+    for file, tex_offsrc in zip(tex_files, tex_offsrcc):
+        print("Attempting to fetch: {file}".format(file = str(PureWindowsPath(file))))
+        filename_check = dep.check_format_of_filename(str(PureWindowsPath(file)), TEX_FORMAT_STR, TEX_FILETYPES, str(PureWindowsPath(tex_offsrc)))
+        print("filename_check_return value:", filename_check, sep="\n")
+        if str(PureWindowsPath(file)):
+            pop = dep.import_helper(filename_check, TEX_IMPORT_HELPER_ID_STRING)
+        if filename_check is None:
+            pass
+    stop_tk()
 
 main()

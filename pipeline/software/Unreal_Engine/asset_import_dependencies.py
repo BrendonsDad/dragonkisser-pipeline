@@ -94,11 +94,14 @@ def import_static_mesh(filepath: str, destination_name: str, destination_path: s
 
 #helper function for other 2 scripts.
 def import_helper(fd, typea):
+    print("HEYLOOKHERE",fd)
+    sd = fixPath(fd[0]),    fixPath(fd[1]),    fixPath(fd[2])
+    print("HEYLOOKHERE",sd)
     if typea == FUNC_ID_TEXTURE:
-        import_textures(fd[0], fd[1], fd[2])
+        import_textures(sd[0], sd[1], sd[2])
     if typea == FUNC_ID_MODEL:
-        import_static_mesh(fd[0], fd[1], fd[2])
-    return (fd[1], fd[2])
+        import_static_mesh(sd[0], sd[1], sd[2])
+    return (sd[1], sd[2])
 """
 Imports textures
 """
@@ -121,6 +124,9 @@ def import_textures(filepath: str, destination_name: str, destination_path: str)
 Create material instance for asset
 """
 def create_mat_instance(mat_name: str, destination_path: str):
+    print("createMatInstance",mat_name, destination_path, sep="\n")
+    destination_path = fixPath(destination_path)
+    print("createMatInstance",mat_name, destination_path, sep="\n")
     eal = unreal.EditorAssetLibrary()
     parent_mat = eal.load_asset(MAMPATH)
     if parent_mat == None:
@@ -144,32 +150,40 @@ def create_mat_instance(mat_name: str, destination_path: str):
     mat_inst.set_editor_property("parent", parent_mat)
     return mat_inst
 
-
+def fixPath(path_str):
+    # return path_str.replace("/", "\\")
+    return path_str.replace("\\", "/").replace('\\', '/')
 
 def check_format_of_filename(filepath, format, filetype, asset_path):
     print("beginning of checkformatoffilename")
+    filepath = fixPath(filepath)
     splitpath= filepath.split(".")
     path = ".".join(splitpath[:-1]) # all but the last one
     extension = splitpath[-1]
     if extension not in filetype:
         return None
     print("path:", path, sep=" ")
-    filename = path.split("\\")[-1]
+    filename = path.split("/")[-1]
     print("filename:", filename, sep=" ")
-    path = path.split("\\")[:-1] #removes the filename, which we have now extracted
-    path = "\\".join(path)
+    path = path.split("/")[:-1] #removes the filename, which we have now extracted
+    path = "/".join(path)
     print("path:", path, sep=" ")
     name_pieces = filename.split("_")
     print(name_pieces)
     #format = {STRTSTR:"T_", ENDSTR:["BaseColor", "ORM", "Normal", "Emissive"]}
     if name_pieces[0] not in format[STRTSTR]:
         name_pieces.insert(0, format[STRTSTR][0])
-    if name_pieces[-1] not in format[ENDSTR]:
+    if name_pieces[-1] not in format[ENDSTR] and format[ENDSTR] != "":
         name_pieces.append(format[ENDSTR][0])
     print(name_pieces)
     destination_name = "_".join(name_pieces)
+    if(destination_name[-1] == "_"):
+        destination_name = destination_name[:-1]
     destination_path = calculate_destination_path(asset_path, "/Game/")
     print("end of checkformatoffilename:", filepath, destination_name, destination_path, sep="\n")
+    filepath = fixPath(filepath)
+    destination_path = fixPath(destination_path)
+    print("FILEPATH:", filepath, "DEST_NAME", destination_name, "DESTPATH", destination_path)
     return filepath, destination_name, destination_path
 
 
@@ -183,10 +197,14 @@ asset_name: name of the static mesh in unreal (NO FILE EXTENSION)
 asset_dir: directory the asset is found in
 """
 def create_mat_instances(asset_name: str, asset_dir: str):
+    print("createMatInstance",asset_name, asset_dir, sep="\n")
+    asset_dir = fixPath(asset_dir)
+    print("createMatInstance",asset_name, asset_dir, sep="\n")
+
     # get asset from editor
     eal = unreal.EditorAssetLibrary()
-    asset_data = eal.find_asset_data(f"{asset_dir}/{asset_name}")
     print(f"{asset_dir}/{asset_name}")
+    asset_data = eal.find_asset_data(f"{asset_dir}/{asset_name}")
     asset = asset_data.get_asset()
 
     destination_path = asset_dir + "/Textures"
