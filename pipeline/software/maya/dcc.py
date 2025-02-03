@@ -40,6 +40,11 @@ class MayaDCC(DCC):
             "MAYA_SHELF_PATH": self.shelf_path,
             "MAYAUSD_EXPORT_MAP1_AS_PRIMARY_UV_SET": 1,
             "MAYAUSD_IMPORT_PRIMARY_UV_SET_AS_MAP1": 1,
+            "MAYA_MODULE_PATH": os.modpath.join(
+                [
+
+                ]
+            ),
             "PYTHONPATH": os.pathsep.join(
                 [
                     str(pipe_path),
