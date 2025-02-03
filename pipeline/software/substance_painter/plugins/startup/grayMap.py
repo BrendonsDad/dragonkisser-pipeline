@@ -12,15 +12,16 @@ plugin_widgets: list[QtWidgets.QWidget] = []
 
 
 def start_plugin():
-    # Create text widget for menu
-    action = QtWidgets.QAction("GrayScale Mapping")
-    action.triggered.connect(grayMap)
+    pass
+    # # Create text widget for menu
+    # action = QtWidgets.QAction("GrayScale Mapping")
+    # action.triggered.connect(grayMap)
 
-    # Add widget to the File menu
-    sp.ui.add_action(sp.ui.ApplicationMenu.Edit, action)
+    # # Add widget to the File menu
+    # sp.ui.add_action(sp.ui.ApplicationMenu.Edit, action)
 
-    # Store the widget for proper cleanup later
-    plugin_widgets.append(action)
+    # # Store the widget for proper cleanup later
+    # plugin_widgets.append(action)
 
 
 def close_plugin():
