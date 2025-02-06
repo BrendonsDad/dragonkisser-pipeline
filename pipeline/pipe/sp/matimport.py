@@ -28,9 +28,8 @@ def isInstalled(material):
 
 def install(installConst):
 	
-	# res.Shelf.import_resource(res.Shelf, installConst[1], res.Usage.SMART_MATERIAL)#, installConst[0])
-	res.import_project_resource(installConst[1], installConst[2], installConst[0])
-	# res.Shelf.import_resource(file_path = installConst[1], resource_usage= res.Usage.SMART_MATERIAL)#, installConst[0])
+	res.import_session_resource(installConst[1], installConst[2], installConst[0])
+	# res.Shelf.import_resource(installConst[1], res.Usage.SMART_MATERIAL, installConst[0])
 
 
 
