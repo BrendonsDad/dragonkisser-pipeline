@@ -23,14 +23,18 @@ def start_plugin():
     # Store the widget for proper cleanup later
     plugin_widgets.append(action)
     
-    action.trigger()
-
+    sp.event.DISPATCHER.connect_strong(sp.event.ProjectEditionEntered, do_preflight)
 
 def close_plugin():
     for widget in plugin_widgets:
         sp.ui.delete_ui_element(widget)
 
     plugin_widgets.clear()
+    sp.event.DISPATCHER.disconnect(sp.event.ProjectEditionEntered, do_preflight)
+
+
+def do_preflight(event: sp.event.Event) -> None:
+    matImport()
 
 
 if __name__ == "__main__":
