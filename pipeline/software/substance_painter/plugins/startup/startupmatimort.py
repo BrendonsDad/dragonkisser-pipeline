@@ -22,6 +22,8 @@ def start_plugin():
 
     # Store the widget for proper cleanup later
     plugin_widgets.append(action)
+    dis = sp.event.Dispatcher()
+    dis.connect_strong(sp.event.ProjectEditionEntered, matImport)
 
 
 def close_plugin():
