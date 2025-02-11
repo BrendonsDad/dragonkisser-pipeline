@@ -7,7 +7,7 @@ import substance_painter as sp
 
 import pipe.sp
 from pipe.sp.matImport import matImportCheck
-from pipe.sp.matImport import matImportRegardless
+from pipe.sp.matImport import matImportRegardless   
 
 
 plugin_widgets: list[QtWidgets.QWidget] = []
