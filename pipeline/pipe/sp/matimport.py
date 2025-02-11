@@ -32,12 +32,15 @@ def install(installConst):
 	res.import_project_resource(installConst[1], installConst[2], installConst[0])
 	# res.Shelf.import_resource(installConst[1], res.Usage.SMART_MATERIAL, installConst[0])
 
+def matImportCheck():
+	matImport(False)
+def matImportRegardless():
+	matImport(True)
 
-
-def matImport():
+def matImport(check):
 	for mat in CONSTANT_FOR_SMART_MAT:
 		print("".join(["Checking for ", mat[0], "..."]))
-		if not isInstalled(mat):
+		if not isInstalled(mat) or check:
 			print("Installing...")
 			install(mat)
 			print("Installed!")
