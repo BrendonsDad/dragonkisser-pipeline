@@ -6,7 +6,8 @@ from Qt import QtWidgets
 import substance_painter as sp
 
 import pipe.sp
-from pipe.sp.matImport import matImport
+from pipe.sp.matImport import matImportCheck
+from pipe.sp.matImport import matImportRegardless   
 
 
 plugin_widgets: list[QtWidgets.QWidget] = []
@@ -15,7 +16,7 @@ plugin_widgets: list[QtWidgets.QWidget] = []
 def start_plugin():
     # Create text widget for menu
     action = QtWidgets.QAction("Check for New Materials")
-    action.triggered.connect(matImport)
+    action.triggered.connect(matImportRegardless)
 
     # Add widget to the File menu
     sp.ui.add_action(sp.ui.ApplicationMenu.Edit, action)
@@ -34,7 +35,7 @@ def close_plugin():
 
 
 def do_preflight(event: sp.event.Event) -> None:
-    matImport()
+    matImportCheck()
 
 
 if __name__ == "__main__":
