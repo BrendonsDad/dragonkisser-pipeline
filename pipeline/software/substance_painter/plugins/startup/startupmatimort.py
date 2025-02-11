@@ -6,8 +6,12 @@ from Qt import QtWidgets
 import substance_painter as sp
 
 import pipe.sp
-from pipe.sp.matImport import matImportCheck
-from pipe.sp.matImport import matImportRegardless   
+try:
+    from pipe.sp.matimport import matImportCheck
+    from pipe.sp.matimport import matImportRegardless   
+except ModuleNotFoundError:
+    from pipe.sp.matImport import matImportCheck
+    from pipe.sp.matImport import matImportRegardless
 
 
 plugin_widgets: list[QtWidgets.QWidget] = []
