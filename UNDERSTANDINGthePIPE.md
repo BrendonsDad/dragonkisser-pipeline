@@ -84,13 +84,13 @@ Configuration for
 Front page on the github. Good for developer documentation. 
 
 ## Sky Designer.lnk
-The link that goes to Substance Designer, custumized for the film use and forked for the game (with minor edits)
+The link that goes to Substance Designer, customized for the film use and forked for the game (with minor edits)
 
 ## Sky Painter.lnk
-The link that goes to Substance Painter, custumized for the game.
+The link that goes to Substance Painter, customized for the game.
 
 ## Skya.lnk
-The link that goes to Maya, custumized for the game.
+The link that goes to Maya, customized for the game.
 
 ## Skydini.desktop and Skydini.lnk
 As you can see, there are both Skydini.desktop and Skydini.lnk. You might be wonder what the purpose of the desktop file is. 
