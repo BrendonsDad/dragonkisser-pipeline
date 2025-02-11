@@ -78,7 +78,7 @@ Feel free to add to this. (Well, feel free to edit any of these, with mindfulnes
 The open-source license that the project is under. Just leave this where it is.
 
 ## pyproject.toml
-Configuration for 
+Configuration for a bunch of python development tools (mypy, ruff, poetry). Not currently working on windows. 
 
 ## README.md
 Front page on the github. Good for developer documentation. 
