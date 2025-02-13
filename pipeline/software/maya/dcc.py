@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     import typing
 
 from ..baseclass import DCC
-from shared.util import get_rigging_path
+from shared.util import get_rigging_path, get_production_path
 from env import Executables
 
 log = logging.getLogger(__name__)
@@ -34,17 +34,27 @@ class MayaDCC(DCC):
         )
 
         env_vars: typing.Mapping[str, int | str | None] | None
+        module_paths = [] # Initialize an empty list for module paths
+
+        module_paths.append(str(get_production_path() / "maya/module"))
+
+        # # Add your desired module paths here
+        # module_paths.append(str(this_path.parent / "modules")) # Example: Path to your modules
+        # module_paths.append(str(pipe_path / "maya_modules")) # Example: Another path
+
+        module_paths.append(str(get_production_path() / ".."))
+        # You can add more paths as needed
+        # Optionally, get existing MAY_MODULE_PATH and add to it. This is important!
+        existing_module_path = os.environ.get("MAYA_MODULE_PATH")
+        if existing_module_path:
+            module_paths.extend(existing_module_path.split(os.pathsep))
         env_vars = {
             "DCC": str(this_path.parent.name),
             "DWPICKER_PROJECT_DIRECTORY": str(get_rigging_path() / "Pickers"),
             "MAYA_SHELF_PATH": self.shelf_path,
             "MAYAUSD_EXPORT_MAP1_AS_PRIMARY_UV_SET": 1,
             "MAYAUSD_IMPORT_PRIMARY_UV_SET_AS_MAP1": 1,
-            "MAYA_MODULE_PATH": os.modpath.join(
-                [
-
-                ]
-            ),
+            "MAYA_MODULE_PATH": os.pathsep.join(module_paths),
             "PYTHONPATH": os.pathsep.join(
                 [
                     str(pipe_path),
