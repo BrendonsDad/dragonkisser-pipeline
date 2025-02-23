@@ -7,7 +7,7 @@ def run():
     libraries = [
         {
             "name": "LnD Poses",
-            "path": str(get_anim_path() / "studiolibrary/lnd-poses"),
+            "path": str(get_anim_path() / "studiolibrary/sky-poses"),
             "default": True,
             "theme": {
                 "accentColor": "rgb(97, 30, 10)",
