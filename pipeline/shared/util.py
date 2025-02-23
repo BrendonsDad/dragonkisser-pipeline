@@ -80,7 +80,7 @@ def get_rigging_path() -> Path:
 
 
 def get_anim_path() -> Path:
-    return get_production_path().parent / "anim"
+    return get_production_path().parent / "Anim"
 
 
 def get_previs_path() -> Path:

@@ -34,6 +34,9 @@ class MayaDCC(DCC):
         )
 
         env_vars: typing.Mapping[str, int | str | None] | None
+
+
+        
         module_paths = [] # Initialize an empty list for module paths
 
         module_paths.append(str(get_production_path() / "maya/module"))
@@ -42,12 +45,15 @@ class MayaDCC(DCC):
         # module_paths.append(str(this_path.parent / "modules")) # Example: Path to your modules
         # module_paths.append(str(pipe_path / "maya_modules")) # Example: Another path
 
-        module_paths.append(str(get_production_path() / ".."))
         # You can add more paths as needed
         # Optionally, get existing MAY_MODULE_PATH and add to it. This is important!
         existing_module_path = os.environ.get("MAYA_MODULE_PATH")
         if existing_module_path:
             module_paths.extend(existing_module_path.split(os.pathsep))
+        
+
+
+
         env_vars = {
             "DCC": str(this_path.parent.name),
             "DWPICKER_PROJECT_DIRECTORY": str(get_rigging_path() / "Pickers"),

@@ -89,12 +89,14 @@ to change endings in an EXISTING project:
 
 // save files before changing
 
+
 $ git add . -u
 $ git commit -m "Saving files before refreshing line endings"
 
+
 // renormalize endings (make sure run from project root)
 
-$ git add --renomalize
+git add --renomalize
 
 # check and commit
 
@@ -103,4 +105,12 @@ $ git commit -m "normalize line endings"
 
 * carriage return brings it to the first column. Line feed brings it straight.
 
+# launch a dcc
+/c/Program\ Files/Autodesk/Maya2025/bin/mayapy.exe pipeline --log-level=INFO maya
 
+# Using pip and other cool things on windows. 
+Do so through a python installation
+
+for example, if I am on windows and want to download the six module i would try:
+
+C:\Program Files\Autodesk\Maya2025\bin\mayapy.exe -m pip download six
