@@ -12,7 +12,7 @@
    - Go to https://github.com/settings/keys and add the contents of `~/.ssh/github.pub` as a **New SSH key**
 1. Make a local copy of the git repo
    ```bash
-   git clone --recurse-submodules -c core.sshCommand='ssh -i /h/.ssh/github' git@github.com:cmlkartchner/skyguard-pipeline.git
+   git clone --recurse-submodules -c core.sshCommand='ssh -i /h/.ssh/github' git@github.com:BrendonsDad/dragonkisser-pipeline.git
    cd skyguard-pipeline
    ```
 1. Configure the git repo to use the new SSH key and our git hooks
